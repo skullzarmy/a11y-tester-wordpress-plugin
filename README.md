@@ -6,7 +6,7 @@
 -   👤 Original Author: Joe Peterson
 -   👥 Contributors: ([your name here!](./CONTRIBUTING.md))
 -   🔗 Author URI: https://joepeterson.work
--   📑 License: GPLv3 License
+-   📑 License: [GPLv3 License](./LICENSE)
 
 ## 🎯 Goal
 
