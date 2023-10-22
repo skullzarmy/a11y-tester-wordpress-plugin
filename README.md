@@ -6,7 +6,7 @@
 -   👤 Original Author: Joe Peterson
 -   👥 Contributors: ([your name here!](./CONTRIBUTING.md))
 -   🔗 Author URI: https://joepeterson.work
--   📑 License: MIT License
+-   📑 License: GPLv3 License
 
 ## 🎯 Goal
 
@@ -40,7 +40,9 @@ The plugin comes with a predefined set of CSS styles to make the results readabl
 
 ## 📜 License
 
-The A11y Tester WordPress plugin is open-sourced software licensed under the [MIT license](./LICENSE).
+This WordPress Plugin is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 2 of the License or any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See [the License file](./LICENSE) for more details.
 
 ## 👏 Contributions
 

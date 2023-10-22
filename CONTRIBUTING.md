@@ -42,4 +42,4 @@ This project and everyone participating in it is governed by the [A11y Tester Co
 
 ### 📃 License
 
-By contributing, you agree that your contributions will be licensed under its [MIT License](./LICENSE).
+By contributing, you agree that your contributions will be licensed under its [GPLv3 License](./LICENSE).

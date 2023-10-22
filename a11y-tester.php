@@ -8,7 +8,6 @@
  * Author URI: https://joepeterson.work
  */
 
-// Enqueue axe-core from CDN and custom JS
 function enqueue_a11y_scripts()
 {
     if (is_admin()) {
