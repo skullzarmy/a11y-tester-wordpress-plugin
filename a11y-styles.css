@@ -28,7 +28,7 @@
 
 /* Collapsible buttons */
 #a11y-results button.collapsible {
-    background-color: #1a73e8;
+    background-color: #5f9ff2;
     color: white;
     cursor: pointer;
     padding: 10px;
@@ -41,7 +41,6 @@
     transition: background-color 0.3s;
 }
 
-/* Hover and active state */
 #a11y-results button.collapsible:active,
 #a11y-results button.collapsible:hover {
     background-color: #155a8a;
@@ -50,7 +49,7 @@
 /* Content blocks */
 #a11y-results div.a11y-content {
     padding: 10px;
-    display: none; /* Make sure this is set to none */
+    display: none; /* set to none for accordions to default closed */
     overflow: hidden;
     background-color: #f9f9f9;
     border-radius: 4px;
@@ -91,7 +90,7 @@
     text-decoration: underline;
 }
 
-/* Impact-based colors with higher specificity */
+/* Impact-based colors */
 #a11y-results button.collapsible.impact-minor {
     background-color: #ffe082;
     color: #000;
