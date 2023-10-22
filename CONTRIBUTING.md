@@ -43,3 +43,7 @@ This project and everyone participating in it is governed by the [A11y Tester Co
 ### 📃 License
 
 By contributing, you agree that your contributions will be licensed under its [GPLv3 License](./LICENSE).
+
+### 📜 WordPress Plugin Directory Contributor Listing
+
+If you want to be listed as a contributor on the WordPress Plugin Directory when and if this plugin is released there, please provide your WordPress.org account username when you submit your pull request. This way, we can add you to the contributor's list which will be reflected on the WordPress Plugin Directory.
