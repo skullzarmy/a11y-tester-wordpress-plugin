@@ -42,3 +42,22 @@ function run_a11y_test_function()
     wp_send_json(array('url' => $url));
     wp_die();
 }
+
+function a11y_custom_plugin_links($links, $file)
+{
+
+    // Check if this is your plugin. If not, return the default links array.
+    if (plugin_basename(__FILE__) === $file) {
+        // You can make the links open in a new tab by adding target='_blank' to the anchor tags.
+        $row_meta = array(
+            'source' => '<a href="https://github.com/skullzarmy/a11y-tester-wordpress-plugin" target="_blank" rel="nofollow noopener">Source Code</a>',
+            'support' => '<a href="https://github.com/skullzarmy/a11y-tester-wordpress-plugin/issues" target="_blank" rel="nofollow noopener">Support</a>',
+        );
+
+        // Merge our new links with the default links.
+        return array_merge($links, $row_meta);
+    }
+
+    return (array) $links;
+}
+add_filter('plugin_row_meta', 'a11y_custom_plugin_links', 10, 2);
