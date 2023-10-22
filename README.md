@@ -44,8 +44,9 @@ The A11y Tester WordPress plugin is open-sourced software licensed under the [MI
 
 ## 👏 Contributions
 
-Contributions, issues, and feature requests are welcome! Feel free to check issues page.
+-   Contributions, issues, and feature requests are **welcome!** Feel free to check the [issues](https://github.com/skullzarmy/a11y-tester-wordpress-plugin/issues) page.
+-   Please read [the contributing guidelines](./CONTRIBUTING.md) as well as the [Code of Conduct](./CODE_OF_CONDUCT.md) prior to contributing.
 
 ## 📞 Support
 
-For support, visit the A11y Tester WordPress plugin GitHub repository.
+For support, visit the [A11y Tester WordPress plugin GitHub repository](https://github.com/skullzarmy/a11y-tester-wordpress-plugin).
