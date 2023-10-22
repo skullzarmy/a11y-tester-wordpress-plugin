@@ -1,5 +1,9 @@
 # A11y Tester WordPress Plugin
 
+[![SoCalTechLab.com logo - click to visit](./sctl_xs_rounded_white_text.webp)](https://socaltechlab.com/)
+
+[a SoCalTechLab.com project](https://socaltechlab.com/)
+
 -   📣 Plugin Name: A11y Tester
 -   ✨ Description: Test accessibility of your WordPress pages and posts right from the admin dashboard!
 -   📝 Latest Release: [Latest](https://github.com/skullzarmy/a11y-tester-wordpress-plugin/releases/latest)
