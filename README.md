@@ -28,9 +28,13 @@ The A11y Tester WordPress plugin aims to make accessibility testing seamless and
 
 1. Download the [latest release](https://github.com/skullzarmy/a11y-tester-wordpress-plugin/releases/latest) .zip.
 1. Install the plugin through the WordPress plugins screen directly.
+    1. ![Plugins > Add New](./plugins-add-new.webp)
+    1. ![Upload Plugin > Install Now](./upload-plugin-large.webp)
 1. Activate the plugin through the 'Plugins' screen in WordPress.
 
 ## 🛠 Usage
+
+![A11y Tester Meta Box](./a11y-test-results-example.webp)
 
 1. Edit Post/Page: Navigate to the post or page you want to test.
 1. Find A11y Tester Meta Box: Scroll down to find the 'A11y Tester' meta box.
