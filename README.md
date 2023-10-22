@@ -2,7 +2,7 @@
 
 -   📣 Plugin Name: A11y Tester
 -   ✨ Description: Test accessibility of your WordPress pages and posts right from the admin dashboard!
--   📝 Version: 1.0
+-   📝 Latest Release: [Latest](https://github.com/skullzarmy/a11y-tester-wordpress-plugin/releases/latest)
 -   👤 Original Author: Joe Peterson
 -   👥 Contributors: ([your name here!](./CONTRIBUTING.md))
 -   🔗 Author URI: https://joepeterson.work
