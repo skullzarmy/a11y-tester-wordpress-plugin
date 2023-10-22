@@ -22,7 +22,7 @@ add_action('admin_enqueue_scripts', 'enqueue_a11y_scripts');
 // Add meta box
 function add_a11y_meta_box()
 {
-    add_meta_box('a11y_meta_box', 'A11y Tester', 'a11y_meta_box_content', array('post', 'page'), 'normal', 'high');
+    add_meta_box('a11y_meta_box', 'Accessibility Tester', 'a11y_meta_box_content', array('post', 'page'), 'normal', 'high');
 }
 add_action('add_meta_boxes', 'add_a11y_meta_box');
 
