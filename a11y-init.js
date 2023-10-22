@@ -8,13 +8,14 @@ window.addEventListener("DOMContentLoaded", function () {
     }
 
     const runA11yTests = async () => {
+        event.preventDefault();
         const postID = document.querySelector("input#post_ID").value;
         const requestData = {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
             },
-            body: `action=run_ally_test&post_id=${postID}`,
+            body: `action=run_a11y_test&post_id=${postID}&security=${wpData.nonce}`,
         };
 
         const response = await fetch(wpData.ajax_url, requestData);
@@ -34,6 +35,7 @@ window.addEventListener("DOMContentLoaded", function () {
             results.violations.forEach((violation) => {
                 const section = document.createElement("div");
                 const button = document.createElement("button");
+                button.type = "button";
                 const content = document.createElement("div");
 
                 button.innerHTML = `${violation.id} - ${violation.impact}`;
@@ -84,12 +86,14 @@ window.addEventListener("DOMContentLoaded", function () {
         }
 
         const btn = document.createElement("button");
+        btn.type = "button";
         btn.id = "run-a11y-test-button";
         btn.textContent = "Run A11y Test";
         btn.addEventListener("click", runA11yTests);
         metaBoxInsideDiv.appendChild(btn);
 
         const clrBtn = document.createElement("button");
+        clrBtn.type = "button";
         clrBtn.id = "clear-a11y-test-button";
         clrBtn.textContent = "Clear A11y Test";
         clrBtn.addEventListener("click", () => {
