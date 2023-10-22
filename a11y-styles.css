@@ -1,0 +1,143 @@
+/* CSS Reset for Specific Elements */
+#a11y-results *,
+#a11y-results *::before,
+#a11y-results *::after {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: inherit;
+}
+
+/* Container for the entire result set */
+#a11y-results {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Container for each violation section */
+#a11y-results > div {
+    margin: 15px 0;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Collapsible buttons */
+#a11y-results button.collapsible {
+    background-color: #1a73e8;
+    color: white;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+    text-align: left;
+    outline: none;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+/* Hover and active state */
+#a11y-results button.collapsible:active,
+#a11y-results button.collapsible:hover {
+    background-color: #155a8a;
+}
+
+/* Content blocks */
+#a11y-results div.a11y-content {
+    padding: 10px;
+    display: none; /* Make sure this is set to none */
+    overflow: hidden;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+
+/* Tables */
+#a11y-results table {
+    width: 100%;
+    margin: 10px 0;
+    border-collapse: collapse;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+/* Table Headers */
+#a11y-results th {
+    background-color: #f2f2f2;
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ccc;
+}
+
+/* Table Data */
+#a11y-results td {
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ccc;
+}
+
+/* Links */
+#a11y-results a {
+    color: #1a73e8;
+    text-decoration: none;
+}
+
+#a11y-results a:hover {
+    text-decoration: underline;
+}
+
+/* Impact-based colors with higher specificity */
+#a11y-results button.collapsible.impact-minor {
+    background-color: #ffe082;
+    color: #000;
+}
+
+#a11y-results button.collapsible.impact-moderate {
+    background-color: #90caf9;
+    color: #000;
+}
+
+#a11y-results button.collapsible.impact-serious {
+    background-color: #ef9a9a;
+    color: #000;
+}
+
+#a11y-results button.collapsible.impact-critical {
+    background-color: #d32f2f;
+    color: white;
+}
+
+/* Buttons */
+#run-a11y-test-button,
+#clear-a11y-test-button {
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    text-align: center;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+#run-a11y-test-button {
+    background-color: #4caf50;
+}
+
+#run-a11y-test-button:hover {
+    background-color: #45a049;
+}
+
+#clear-a11y-test-button {
+    background-color: #f44336;
+}
+
+#clear-a11y-test-button:hover {
+    background-color: #d32f2f;
+}

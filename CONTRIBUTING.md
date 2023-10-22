@@ -1,0 +1,45 @@
+# Contributing to A11y Tester WordPress Plugin
+
+## 👍🎉 First off, thanks for taking the time to contribute! 🎉👍
+
+The following is a set of guidelines for contributing to the A11y Tester WordPress Plugin, which is hosted on GitHub. These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
+
+## 🌳 Code of Conduct
+
+This project and everyone participating in it is governed by the [A11y Tester Code of Conduct](./CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
+
+## 🚀 Getting Started
+
+1. **Fork the Repository**: Fork the project repository to your GitHub account.
+1. **Clone the Fork**: Clone the forked repository to your local machine.
+1. **Set Up Development Environment**: Make sure your development environment is set up according to the instructions provided in the README.
+
+## 🌟 How Can I Contribute?
+
+### 🐞 Reporting Bugs
+
+1. **Check Existing Issues**: Ensure the bug was not already reported by searching on GitHub under Issues.
+1. **Create a New Issue**: If you're unable to find an open issue addressing the problem, open a new issue using the appropriate issue template.
+
+### 🆕 Suggesting Enhancements
+
+1. **Check Existing Issues**: Ensure the enhancement was not already reported or suggested by searching on GitHub under Issues.
+1. **Create a New Issue**: Open a new issue using the appropriate issue template to suggest your enhancement.
+
+### 📜 Pull Requests
+
+1. **Create a Branch**: Create a new feature branch related to the issue you are fixing.
+1. **Make Changes**: Make the necessary changes following coding standards and best practices.
+1. **Commit Changes**: Commit your changes with a descriptive commit message.
+1. **Push to Origin**: Push your branch to GitHub.
+1. **Open a Pull Request**: Go to the GitHub repository and open a new pull request from your feature branch, providing the necessary information.
+
+### 🎨 Coding Standards
+
+-   Follow the [WordPress Coding Standards](https://developer.wordpress.org/coding-standards/).
+-   Write meaningful commit messages.
+-   Comment your code when necessary.
+
+### 📃 License
+
+By contributing, you agree that your contributions will be licensed under its [MIT License](./LICENSE).
