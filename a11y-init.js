@@ -1,8 +1,4 @@
-console.log("Script is running"); // This will print in the console if the script runs
-
 window.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM is ready"); // This will print when the DOM is ready
-
     async function fetchPageContent(url) {
         const response = await fetch(url);
         const text = await response.text();
