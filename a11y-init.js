@@ -1,4 +1,10 @@
 window.addEventListener("DOMContentLoaded", function () {
+    function escapeHTML(str) {
+        const div = document.createElement("div");
+        div.appendChild(document.createTextNode(str));
+        return div.innerHTML;
+    }
+
     async function fetchPageContent(url) {
         const response = await fetch(url);
         const text = await response.text();
@@ -32,6 +38,10 @@ window.addEventListener("DOMContentLoaded", function () {
             const container = document.createElement("div");
             container.id = "a11y-results";
 
+            const resHeader = document.createElement("h2");
+            resHeader.textContent = "Accessibility Test Results";
+            container.appendChild(resHeader);
+
             results.violations.forEach((violation) => {
                 const section = document.createElement("div");
                 const button = document.createElement("button");
@@ -58,8 +68,8 @@ window.addEventListener("DOMContentLoaded", function () {
                 violation.nodes.forEach((node) => {
                     const nodeTable = document.createElement("table");
                     nodeTable.innerHTML = `
-                        <tr><th>HTML Element</th><td>${node.html}</td></tr>
-                        <tr><th>Impact</th><td>${node.impact}</td></tr>
+                        <tr><th>HTML Element</th><td><code>${escapeHTML(node.html)}</code></td></tr>
+                        <tr><th>Impact</th><td class="impact-${violation.impact}">${node.impact}</td></tr>
                         <tr><th>Failure Summary</th><td>${node.failureSummary}</td></tr>
                     `;
 

@@ -3,7 +3,7 @@
 /**
  * Plugin Name: A11y Tester
  * Description: A plugin to test accessibility of any page or post.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: Joe Peterson
  * Author URI: https://joepeterson.work
  */

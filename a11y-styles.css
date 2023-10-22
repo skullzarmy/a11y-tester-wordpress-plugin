@@ -71,6 +71,9 @@
     padding: 8px;
     text-align: left;
     border: 1px solid #ccc;
+    width: 15%;
+    white-space: normal;
+    word-wrap: break-word;
 }
 
 /* Table Data */
@@ -78,6 +81,8 @@
     padding: 8px;
     text-align: left;
     border: 1px solid #ccc;
+    white-space: normal;
+    word-wrap: break-word;
 }
 
 /* Links */
@@ -107,6 +112,26 @@
 }
 
 #a11y-results button.collapsible.impact-critical {
+    background-color: #d32f2f;
+    color: white;
+}
+
+#a11y-results tr td.impact-minor {
+    background-color: #ffe082;
+    color: #000;
+}
+
+#a11y-results tr td.impact-moderate {
+    background-color: #90caf9;
+    color: #000;
+}
+
+#a11y-results tr td.impact-serious {
+    background-color: #ef9a9a;
+    color: #000;
+}
+
+#a11y-results tr td.impact-critical {
     background-color: #d32f2f;
     color: white;
 }
