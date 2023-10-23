@@ -17,8 +17,8 @@ function enqueue_a11y_scripts($hook)
         $nonce = wp_create_nonce('a11y_nonce');
         wp_localize_script('a11y-init', 'wpData', array('ajax_url' => admin_url('admin-ajax.php'), 'nonce' => $nonce));
 
-        $theme_css_path = get_stylesheet_directory() . '/a11y-override-styles.css';
-        $theme_css_url = get_stylesheet_directory_uri() . '/a11y-override-styles.css';
+        $theme_css_path = get_stylesheet_directory() . '/a11y-tester/a11y-styles.css';
+        $theme_css_url = get_stylesheet_directory_uri() . '/a11y-tester/a11y-styles.css';
         $plugin_css_url = plugin_dir_url(__FILE__) . 'a11y-styles.css';
 
         if (file_exists($theme_css_path)) {
