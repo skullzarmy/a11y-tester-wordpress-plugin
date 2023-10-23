@@ -60,7 +60,25 @@ As of the current release, the plugin does not allow customization of axe-core's
 
 ## 🖌 Customization
 
-The plugin comes with a predefined set of CSS styles to make the results readable and organized. You can customize the styles by editing the a11y-styles.css file.
+### Overriding Plugin Styles
+
+To allow for more flexible styling customization, the plugin supports the ability to override the default styles. You can do this by placing a cloned version of the `a11y-styles.css` file in your active theme folder, inside a sub-folder named `a11y-tester`.
+
+For example, the structure should be as follows:
+
+```plaintext
+- wp-content
+    - themes
+        - your-active-theme
+            - a11y-tester
+                - a11y-styles.css
+```
+
+When this file is detected in the active theme folder, the plugin will automatically enqueue this style sheet in place of the default one, allowing you to customize the styles as you see fit.
+
+If the file is not found in the active theme folder, the plugin will fall back to using the default styles located in the plugin directory.
+
+To implement this, make sure to update your CSS and keep it in sync with the `a11y-styles.css` file in the `a11y-tester` folder of your active theme.
 
 ## 📜 License
 
