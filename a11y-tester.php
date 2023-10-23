@@ -3,7 +3,7 @@
 /**
  * Plugin Name: A11y Tester
  * Description: A plugin to test accessibility of any page or post.
- * Version: 1.0.3
+ * Version: 1.0.4
  * Author: Joe Peterson
  * Author URI: https://joepeterson.work
  */
@@ -52,6 +52,7 @@ add_action('wp_ajax_run_a11y_test', 'run_a11y_test_function');
 function run_a11y_test_function()
 {
     check_ajax_referer('a11y_nonce', 'security');
+
     if (!current_user_can('edit_posts')) {
         wp_send_json_error('You do not have the necessary permissions.');
         wp_die();
@@ -62,8 +63,14 @@ function run_a11y_test_function()
         wp_send_json_error('Invalid post ID');
         wp_die();
     }
+
     $post_id = absint($post_id);
     $url = get_permalink($post_id);
+    if (!$url) {
+        wp_send_json_error('Could not get the permalink');
+        wp_die();
+    }
+
     wp_send_json_success(array('url' => $url));
     wp_die();
 }

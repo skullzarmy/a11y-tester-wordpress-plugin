@@ -87,7 +87,6 @@
 
 /* Tables */
 #a11y-results table {
-    width: 100%;
     margin: 10px 0;
     border-collapse: collapse;
     border-radius: var(--border-radius);
@@ -194,4 +193,24 @@
 
 #clear-a11y-test-button:hover {
     filter: brightness(90%);
+}
+
+li.summary-passes {
+    color: var(--run-test-bg-btn);
+    font-size: 1.2em;
+}
+
+li.summary-violations {
+    color: var(--impact-critical);
+    font-size: 1.2em;
+}
+
+li.summary-inapplicable {
+    color: #555;
+    font-size: 0.9em;
+}
+
+li.summary-incomplete {
+    color: #555;
+    font-size: 0.9em;
 }
