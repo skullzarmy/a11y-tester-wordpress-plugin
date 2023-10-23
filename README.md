@@ -42,6 +42,22 @@ The A11y Tester WordPress plugin aims to make accessibility testing seamless and
 1. View Results: The test results will be displayed within the meta box. Issues are categorized by impact severity.
 1. Clear Results: Click 'Clear A11y Test' to remove the results.
 
+## ⚙️ Under the Hood
+
+The A11y Tester WordPress plugin utilizes the robust [axe-core](https://github.com/dequelabs/axe-core) library to conduct accessibility testing on your WordPress pages and posts.
+
+### 🤔 What is Axe-Core?
+
+Axe-core is an industry standard for web accessibility, providing automated accessibility testing to ensure your web content is compliant with Web Content Accessibility Guidelines (WCAG). The library produces a detailed report of accessibility issues, categorized by their level of impact, which aids in prioritizing areas for improvement.
+
+### 🏃‍♀️ How Does It Work?
+
+Unlike typical client-side implementations, our plugin doesn't scan the admin edit screen where it resides. Instead, when you click the 'Run A11y Test' button in the A11y Tester meta box on your WordPress admin dashboard, an AJAX request is sent to the server. The plugin then uses axe-core to perform an accessibility scan on the full URL of the selected page or post. The server processes the scan and returns the results, which are displayed directly within the A11y Tester meta box, sorted by impact level for your convenience.
+
+### 🛠️ Future Plans for Customization
+
+As of the current release, the plugin does not allow customization of axe-core's run parameters. However, we are planning to introduce this feature in upcoming versions to offer a more tailored accessibility testing experience.
+
 ## 🖌 Customization
 
 The plugin comes with a predefined set of CSS styles to make the results readable and organized. You can customize the styles by editing the a11y-styles.css file.
