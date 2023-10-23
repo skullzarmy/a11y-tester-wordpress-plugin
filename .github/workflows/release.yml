@@ -1,0 +1,40 @@
+name: Automated Release for A11y Tester WordPress Plugin
+
+on:
+    push:
+        paths:
+            - "readme.txt"
+
+jobs:
+    release:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Get Latest Tag
+              id: latest_tag
+              run: echo ::set-output name=tag::$(git describe --tags --abbrev=0)
+
+            - name: Extract Version From readme.txt
+              run: echo "NEW_VERSION=$(grep 'Stable tag:' readme.txt | awk '{print $3}')" >> $GITHUB_ENV
+
+            - name: Check if Version is New
+              run: |
+                  if [[ "${{ steps.latest_tag.outputs.tag }}" == "${{ env.NEW_VERSION }}" ]]; then
+                    echo "Version has not been bumped. Exiting."
+                    exit 1
+                  fi
+
+            - name: Create GitHub Release
+              id: create_release
+              uses: gh-actions/create-release@v1
+              with:
+                  tag_name: ${{ env.NEW_VERSION }}
+                  release_name: v${{ env.NEW_VERSION }}
+                  body: Auto-generated release.
+                  draft: false
+                  prerelease: false
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
