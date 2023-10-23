@@ -4,7 +4,7 @@ Tags: accessibility, a11y, testing, axe-core
 Requires at least: 4.7
 Tested up to: 5.9
 Requires PHP: 7.0
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Author: Joe Peterson
@@ -46,7 +46,13 @@ While A11y Tester aims to be as compatible as possible with other themes and plu
 
 == Customization ==
 
-The plugin comes with a predefined set of CSS styles to make the results readable and organized. You can customize the styles by editing the a11y-styles.css file.
+The plugin comes with a predefined set of CSS styles to make the results readable and organized. Starting from version 1.0.3, you can override the default styles by placing a customized `a11y-styles.css` file in the following directory structure:
+
+- wp-content
+    - themes
+        - your-active-theme
+            - a11y-tester
+                - a11y-styles.css
 
 == Screenshots ==
 
@@ -65,6 +71,9 @@ Initial release, no upgrades required.
 
 = 1.0.2 =
 * Added formatting improvements to the result report.
+
+= 1.0.3 =
+* Added support for overriding styles via theme directory.
 
 == License ==
 
@@ -87,3 +96,6 @@ Contributions, issues, and feature requests are welcome! For support, visit the 
 
 = 1.0 =
 * Initial release
+
+= 1.0.3 =
+* Added support for overriding styles via theme directory.
