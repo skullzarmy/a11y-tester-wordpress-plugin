@@ -4,7 +4,7 @@ Tags: accessibility, a11y, testing, axe-core
 Requires at least: 4.7
 Tested up to: 5.9
 Requires PHP: 7.0
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Author: Joe Peterson
@@ -44,6 +44,9 @@ While A11y Tester aims to be as compatible as possible with other themes and plu
 4. View Results: The test results will be displayed within the meta box. Issues are categorized by impact severity.
 5. Clear Results: Click 'Clear A11y Test' to remove the results.
 
+= Summary Table =
+Starting from version 1.0.4, a summary table is added to the results for a more comprehensive view of the test outcome.
+
 == Customization ==
 
 The plugin comes with a predefined set of CSS styles to make the results readable and organized. Starting from version 1.0.3, you can override the default styles by placing a customized `a11y-styles.css` file in the following directory structure:
@@ -75,6 +78,10 @@ Initial release, no upgrades required.
 = 1.0.3 =
 * Added support for overriding styles via theme directory.
 
+= 1.0.4 =
+* Refactored the axe test to use a temporary iframe.
+* Added a summary table to the test results.
+
 == License ==
 
 This WordPress Plugin is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 2 of the License or any later version.
@@ -87,6 +94,13 @@ Contributions, issues, and feature requests are welcome! For support, visit the 
 
 == Changelog ==
 
+= 1.0.4 =
+* Refactored the axe test to use a temporary iframe.
+* Added a summary table to the test results.
+
+= 1.0.3 =
+* Added support for overriding styles via theme directory.
+
 = 1.0.2 =
 * Added formatting improvements to the result report.
 
@@ -96,6 +110,3 @@ Contributions, issues, and feature requests are welcome! For support, visit the 
 
 = 1.0 =
 * Initial release
-
-= 1.0.3 =
-* Added support for overriding styles via theme directory.
