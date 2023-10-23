@@ -4,6 +4,7 @@ on:
     push:
         paths:
             - "readme.txt"
+    workflow_dispatch:
 
 jobs:
     release:
