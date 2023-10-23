@@ -5,6 +5,11 @@ function escapeHTML(str) {
 }
 
 function createSummarySection(results) {
+    // Create the main flex container
+    const flexContainer = document.createElement("div");
+    flexContainer.id = "a11y-summary-container";
+
+    // Create the summary div
     const summaryDiv = document.createElement("div");
     summaryDiv.id = "a11y-summary";
     const summaryHeader = document.createElement("h3");
@@ -34,45 +39,49 @@ function createSummarySection(results) {
         listItem.className = `summary-${label.toLowerCase()}`;
         listItem.textContent = `${label}: ${count}`;
 
-        // If this is the "Violations" item, add a sub-table for severity counts
-        if (label === "Violations" && count > 0) {
-            const subTable = document.createElement("table");
-            const subTableHeader = document.createElement("thead");
-            const subTableHeaderRow = document.createElement("tr");
-            const subTableBody = document.createElement("tbody");
-
-            // Create the table header
-            // ["Severity", "Count"].forEach((headerText) => {
-            //     const th = document.createElement("th");
-            //     th.textContent = headerText;
-            //     subTableHeaderRow.appendChild(th);
-            // });
-            // subTableHeader.appendChild(subTableHeaderRow);
-            // subTable.appendChild(subTableHeader);
-
-            // Create the table body with severity counts
-            Object.entries(severityCounts).forEach(([severity, count]) => {
-                const tr = document.createElement("tr");
-                const tdSeverity = document.createElement("td");
-                const tdCount = document.createElement("td");
-                tdSeverity.className = `impact-${severity}`;
-                tdCount.className = `impact-${severity}`;
-                tdSeverity.textContent = severity;
-                tdCount.textContent = count;
-                tr.appendChild(tdSeverity);
-                tr.appendChild(tdCount);
-                subTableBody.appendChild(tr);
-            });
-            subTable.appendChild(subTableBody);
-
-            listItem.appendChild(subTable);
-        }
-
         summaryList.appendChild(listItem);
     });
 
     summaryDiv.appendChild(summaryList);
-    return summaryDiv;
+
+    // Create the violations table
+    const violationsTable = document.createElement("table");
+    violationsTable.id = "violations-table";
+    const tableHeader = document.createElement("thead");
+    const tableHeaderRow = document.createElement("tr");
+
+    // Create the table header
+    // ["Severity", "Count"].forEach((headerText) => {
+    //     const th = document.createElement("th");
+    //     th.textContent = headerText;
+    //     tableHeaderRow.appendChild(th);
+    // });
+
+    // tableHeader.appendChild(tableHeaderRow);
+    // violationsTable.appendChild(tableHeader);
+
+    // Create the table body with severity counts
+    const tableBody = document.createElement("tbody");
+    Object.entries(severityCounts).forEach(([severity, count]) => {
+        const tr = document.createElement("tr");
+        const tdSeverity = document.createElement("td");
+        const tdCount = document.createElement("td");
+        tdSeverity.className = `impact-${severity}`;
+        tdCount.className = `impact-${severity}`;
+        tdSeverity.textContent = severity;
+        tdCount.textContent = count;
+        tr.appendChild(tdSeverity);
+        tr.appendChild(tdCount);
+        tableBody.appendChild(tr);
+    });
+
+    violationsTable.appendChild(tableBody);
+
+    // Append the summary and table to the main flex container
+    flexContainer.appendChild(summaryDiv);
+    flexContainer.appendChild(violationsTable);
+
+    return flexContainer;
 }
 
 function appendViolationSections(container, violations) {
@@ -258,6 +267,10 @@ window.addEventListener("DOMContentLoaded", () => {
             if (oldResults) oldResults.remove();
         });
         metaBoxInsideDiv.appendChild(clrBtn);
+
+        const helpText = document.createElement("p");
+        helpText.textContent = "Make sure you have saved the post before running the test.";
+        metaBoxInsideDiv.appendChild(helpText);
     }
 });
 
