@@ -47,8 +47,8 @@ function createSummarySection(results) {
     // Create the violations table
     const violationsTable = document.createElement("table");
     violationsTable.id = "violations-table";
-    const tableHeader = document.createElement("thead");
-    const tableHeaderRow = document.createElement("tr");
+    // const tableHeader = document.createElement("thead");
+    // const tableHeaderRow = document.createElement("tr");
 
     // Create the table header
     // ["Severity", "Count"].forEach((headerText) => {
@@ -77,9 +77,16 @@ function createSummarySection(results) {
 
     violationsTable.appendChild(tableBody);
 
+    const violationsDiv = document.createElement("div");
+    violationsDiv.id = "a11y-violations-table-wrapper";
+    const violationsHeader = document.createElement("h3");
+    violationsHeader.textContent = "Violations Summary";
+    violationsDiv.appendChild(violationsHeader);
+    violationsDiv.appendChild(violationsTable);
+
     // Append the summary and table to the main flex container
     flexContainer.appendChild(summaryDiv);
-    flexContainer.appendChild(violationsTable);
+    flexContainer.appendChild(violationsDiv);
 
     return flexContainer;
 }
@@ -123,6 +130,14 @@ function appendViolationSections(container, violations) {
         button.className = `collapsible impact-${violation.impact}`;
         content.className = "a11y-content";
 
+        const caretSpan = document.createElement("span");
+        caretSpan.className = "dashicons dashicons-arrow-down";
+        caretSpan.setAttribute("aria-hidden", "true");
+
+        button.innerHTML = `${violation.id} - ${violation.impact} `;
+        button.className = `collapsible impact-${violation.impact}`;
+
+        button.appendChild(caretSpan);
         section.appendChild(button);
         section.appendChild(content);
 
@@ -235,9 +250,12 @@ async function runA11yTests(event) {
                 const summarySection = createSummarySection(results);
                 container.appendChild(summarySection);
 
-                const resHeader = document.createElement("h2");
-                resHeader.textContent = "Accessibility Test Results";
+                const resHeader = document.createElement("h3");
+                resHeader.textContent = "Violation Details";
                 container.appendChild(resHeader);
+                const resSubHeader = document.createElement("p");
+                resSubHeader.textContent = "Click on a violation to see more details.";
+                container.appendChild(resSubHeader);
 
                 appendViolationSections(container, results.violations);
 
@@ -294,6 +312,14 @@ window.addEventListener("DOMContentLoaded", () => {
 window.addEventListener("click", (e) => {
     if (e.target && e.target.classList.contains("collapsible")) {
         const content = e.target.nextElementSibling;
-        content.style.display = content.style.display === "block" ? "none" : "block";
+        const caret = e.target.querySelector(".dashicons");
+
+        if (content.style.display === "block") {
+            content.style.display = "none";
+            if (caret) caret.className = "dashicons dashicons-arrow-down";
+        } else {
+            content.style.display = "block";
+            if (caret) caret.className = "dashicons dashicons-arrow-up";
+        }
     }
 });

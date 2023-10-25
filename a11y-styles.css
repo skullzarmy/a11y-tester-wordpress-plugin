@@ -43,6 +43,7 @@
     padding: 10px;
     border-radius: var(--border-radius);
     box-sizing: border-box;
+    transition: all 0.3s ease-in-out;
 }
 
 /* Container for each violation section */
@@ -104,7 +105,7 @@
 /* Table Headers */
 #a11y-results th {
     background-color: var(--table-header-bg);
-    padding: 8px;
+    padding: 2px;
     text-align: left;
     border: 1px solid var(--table-border);
     width: 15%;
@@ -114,11 +115,30 @@
 
 /* Table Data */
 #a11y-results td {
-    padding: 8px;
-    text-align: left;
+    padding: 2px 10px;
+    text-align: center;
     border: 1px solid var(--table-border);
     white-space: normal;
     word-wrap: break-word;
+}
+
+#a11y-summary-container {
+    display: flex;
+    align-items: flex-start; /* Aligns headers at the top */
+}
+
+#a11y-summary,
+#a11y-violations-table-wrapper {
+    flex: 1; /* Makes both divs take equal width */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Align the content to the middle for both divs */
+#a11y-summary ul,
+#a11y-violations-table-wrapper table {
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 /* Links */
