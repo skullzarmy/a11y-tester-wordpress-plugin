@@ -161,10 +161,19 @@ async function fetchPageContent(url) {
     return doc;
 }
 
+function injectAxeScript(iframe) {
+    return new Promise((resolve, reject) => {
+        const script = iframe.contentWindow.document.createElement("script");
+        script.src = "https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.3.3/axe.min.js";
+        script.onload = resolve;
+        script.onerror = reject;
+        iframe.contentWindow.document.head.appendChild(script);
+    });
+}
+
 async function runA11yTests(event) {
     event.preventDefault();
 
-    // Fetching the postID and security nonce
     const postID = document.querySelector("input#post_ID").value;
     const requestData = {
         method: "POST",
@@ -174,7 +183,6 @@ async function runA11yTests(event) {
         body: `action=run_a11y_test&post_id=${postID}&security=${wpData.nonce}`,
     };
 
-    // Create and show the spinner for loading
     const spinner = document.createElement("span");
     spinner.className = "spinner is-active";
     const metaBoxInsideDiv = document.querySelector("#a11y_meta_box .inside");
@@ -183,40 +191,47 @@ async function runA11yTests(event) {
     }
 
     try {
-        // Fetching the URL from the server
         const response = await fetch(wpData.ajax_url, requestData);
-        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(`Server responded with status ${response.status}`);
+        }
 
-        // Fetching the content of the specified URL
+        const data = await response.json();
         const docContent = await fetchPageContent(data.data.url);
 
-        // Creating an iframe and appending it to the body
         const iframe = document.createElement("iframe");
-        iframe.style.display = "none";
+        iframe.id = "a11yTestIframe";
+        iframe.style.position = "absolute";
+        iframe.style.opacity = "0";
+        iframe.style.width = "1px";
+        iframe.style.height = "1px";
+        iframe.style.border = "none";
         document.body.appendChild(iframe);
 
-        // Writing the fetched HTML content into the iframe
         iframe.contentWindow.document.open();
         iframe.contentWindow.document.write(docContent.documentElement.outerHTML);
         iframe.contentWindow.document.close();
 
-        // Running axe.run when iframe is fully loaded
+        await new Promise((resolve, reject) => {
+            const script = iframe.contentWindow.document.createElement("script");
+            script.src = "https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.3.3/axe.min.js";
+            script.onload = resolve;
+            script.onerror = reject;
+            iframe.contentWindow.document.head.appendChild(script);
+        });
+
         iframe.onload = () => {
-            axe.run(iframe.contentWindow.document, (err, results) => {
+            iframe.contentWindow.axe.run((err, results) => {
                 if (err) throw err;
 
-                // Remove spinner
                 if (spinner) spinner.remove();
 
-                // Removing any previous results
                 const oldResults = document.getElementById("a11y-results");
                 if (oldResults) oldResults.remove();
 
-                // Creating a new container for the results
                 const container = document.createElement("div");
                 container.id = "a11y-results";
 
-                // Adding summary and details to the container
                 const summarySection = createSummarySection(results);
                 container.appendChild(summarySection);
 
@@ -226,19 +241,21 @@ async function runA11yTests(event) {
 
                 appendViolationSections(container, results.violations);
 
-                // Appending the container to the meta box
                 if (metaBoxInsideDiv) {
                     metaBoxInsideDiv.appendChild(container);
                 }
 
-                // Removing the iframe when done
-                iframe.remove();
+                document.body.removeChild(iframe);
             });
         };
     } catch (err) {
         console.error("Error running accessibility tests:", err);
-
-        // Remove spinner if an error occurs
+        const errorMsg = document.createElement("div");
+        errorMsg.className = "error";
+        errorMsg.textContent = `Error: ${err.message}`;
+        if (metaBoxInsideDiv) {
+            metaBoxInsideDiv.appendChild(errorMsg);
+        }
         if (spinner) spinner.remove();
     }
 }

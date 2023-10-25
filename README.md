@@ -52,7 +52,7 @@ Axe-core is an industry standard for web accessibility, providing automated acce
 
 ### 🏃‍♀️ How Does It Work?
 
-Unlike typical client-side implementations, our plugin doesn't scan the admin edit screen where it resides. Instead, when you click the 'Run A11y Test' button in the A11y Tester meta box on your WordPress admin dashboard, an AJAX request is sent to the server. The plugin then uses axe-core to perform an accessibility scan on the full URL of the selected page or post. The server processes the scan and returns the results, which are displayed directly within the A11y Tester meta box, sorted by impact level for your convenience.
+Starting from version 1.0.6, the plugin creates a scoped iframe to securely run the accessibility tests. When you click the 'Run A11y Test' button in the A11y Tester meta box on your WordPress admin dashboard, an AJAX request is sent to the server to retrieve the permalink. The plugin then uses axe-core to perform an accessibility scan on the full URL of the selected page or post within a scoped iframe. The server processes the scan and returns the results, which are displayed directly within the A11y Tester meta box, sorted by impact level for your convenience.
 
 ### 🛠️ Future Plans for Customization
 

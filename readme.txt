@@ -85,6 +85,11 @@ Initial release, no upgrades required.
 = 1.0.5 =
 * Restyled results summary and table
 
+= 1.0.6 =
+* Implemented iframe scoping to securely run accessibility tests.
+* Enhanced performance and security by refactoring the iframe generation and execution code.
+
+
 == License ==
 
 This WordPress Plugin is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 2 of the License or any later version.
@@ -96,6 +101,10 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 Contributions, issues, and feature requests are welcome! For support, visit the [A11y Tester WordPress plugin GitHub repository](https://github.com/skullzarmy/a11y-tester-wordpress-plugin) and [submit an issue](https://github.com/skullzarmy/a11y-tester-wordpress-plugin/issues).
 
 == Changelog ==
+
+= 1.0.6 =
+* Implemented iframe scoping to securely run accessibility tests.
+* Enhanced performance and security by refactoring the iframe generation and execution code.
 
 = 1.0.5 =
 * Restyled results summary and table.

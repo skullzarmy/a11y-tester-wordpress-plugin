@@ -3,7 +3,7 @@
 /**
  * Plugin Name: A11y Tester
  * Description: A plugin to test accessibility of any page or post.
- * Version: 1.0.4
+ * Version: 1.0.6
  * Author: Joe Peterson
  * Author URI: https://joepeterson.work
  */
@@ -11,8 +11,8 @@
 function enqueue_a11y_scripts($hook)
 {
     if ('post.php' === $hook || 'post-new.php' === $hook) {
-        wp_enqueue_script('axe-core', 'https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.8.2/axe.min.js', array(), '4.8.2', true);
-        wp_enqueue_script('a11y-init', plugin_dir_url(__FILE__) . 'a11y-init.js', array('axe-core', 'jquery'), '1.0', true);
+        // axe-core is omitted as it will be loaded dynamically into the iframe
+        wp_enqueue_script('a11y-init', plugin_dir_url(__FILE__) . 'a11y-init.js', array('jquery'), '1.0', true);
 
         $nonce = wp_create_nonce('a11y_nonce');
         wp_localize_script('a11y-init', 'wpData', array('ajax_url' => admin_url('admin-ajax.php'), 'nonce' => $nonce));
