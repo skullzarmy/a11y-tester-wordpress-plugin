@@ -45,6 +45,7 @@ class A11yTester {
     }
 
     async runA11yTests() {
+        this.toggleButtons(true);
         this.initSpinner();
         try {
             const data = await this.fetchPostData();
@@ -54,6 +55,7 @@ class A11yTester {
             this.handleError(err);
         } finally {
             this.removeSpinner();
+            this.toggleButtons(false);
         }
     }
 
@@ -86,10 +88,20 @@ class A11yTester {
         const iframe = this.createIframe(docContent);
         await this.injectAxeScript(iframe);
 
-        iframe.contentWindow.axe.run((err, results) => {
-            if (err) throw err;
-            this.handleTestResults(results);
-            document.body.removeChild(iframe);
+        return new Promise((resolve, reject) => {
+            iframe.contentWindow.addEventListener("DOMContentLoaded", () => {
+                iframe.contentWindow.axe.run((err, results) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        this.handleTestResults(results);
+                        document.body.removeChild(iframe);
+                        resolve();
+                    }
+                });
+            });
+        }).catch((err) => {
+            this.handleError(err);
         });
     }
 
@@ -133,6 +145,13 @@ class A11yTester {
         this.appendViolationSections(container, results.violations);
 
         if (this.metaBoxInsideDiv) this.metaBoxInsideDiv.appendChild(container);
+    }
+
+    toggleButtons(disabled) {
+        const runBtn = document.querySelector("#run-a11y-test-button");
+        const clrBtn = document.querySelector("#clear-a11y-test-button");
+        if (runBtn) runBtn.disabled = disabled;
+        if (clrBtn) clrBtn.disabled = disabled;
     }
 
     handleError(err) {
