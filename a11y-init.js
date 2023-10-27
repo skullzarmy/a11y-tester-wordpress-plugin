@@ -115,6 +115,7 @@ class A11yTester {
     }
 
     handleTestResults(results) {
+        if (!this.metaBoxInsideDiv) return;
         const container = document.createElement("div");
         container.id = "a11y-results";
 
@@ -136,6 +137,11 @@ class A11yTester {
 
     handleError(err) {
         console.error("Error running accessibility tests:", err);
+
+        // Remove any existing error messages
+        const existingError = this.metaBoxInsideDiv.querySelector(".error");
+        if (existingError) existingError.remove();
+
         const errorMsg = document.createElement("div");
         errorMsg.className = "error";
         errorMsg.textContent = `Error: ${err.message}`;
@@ -147,8 +153,17 @@ class A11yTester {
     }
 
     clearResults() {
+        // Remove a11y results if they exist
         const oldResults = document.getElementById("a11y-results");
         if (oldResults) oldResults.remove();
+
+        // Remove any lingering error messages
+        const errorMsg = this.metaBoxInsideDiv.querySelector(".error");
+        if (errorMsg) errorMsg.remove();
+
+        // Remove any lingering iframes
+        const oldIframe = document.getElementById("a11yTestIframe");
+        if (oldIframe) oldIframe.remove();
     }
 
     createSummarySection(results) {
