@@ -34,7 +34,7 @@ The A11y Tester WordPress plugin aims to make accessibility testing seamless and
 
 ## 🛠 Usage
 
-![A11y Tester Meta Box](./a11y-test-results-example.webp)
+![A11y Tester Meta Box](./a11y-test-results-example-1.0.8.webp)
 
 1. Edit Post/Page: Navigate to the post or page you want to test.
 1. Find A11y Tester Meta Box: Scroll down to find the 'A11y Tester' meta box.
