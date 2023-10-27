@@ -1,325 +1,333 @@
-function escapeHTML(str) {
-    const div = document.createElement("div");
-    div.appendChild(document.createTextNode(str));
-    return div.innerHTML;
-}
-
-function createSummarySection(results) {
-    // Create the main flex container
-    const flexContainer = document.createElement("div");
-    flexContainer.id = "a11y-summary-container";
-
-    // Create the summary div
-    const summaryDiv = document.createElement("div");
-    summaryDiv.id = "a11y-summary";
-    const summaryHeader = document.createElement("h3");
-    summaryHeader.textContent = "Test Summary";
-    summaryDiv.appendChild(summaryHeader);
-
-    const summaryList = document.createElement("ul");
-
-    // Create an object to hold the counts for each severity
-    const severityCounts = { critical: 0, serious: 0, moderate: 0, minor: 0 };
-
-    // Count each violation by severity
-    results.violations.forEach((violation) => {
-        if (violation.impact) {
-            severityCounts[violation.impact]++;
-        }
-    });
-
-    // Generate the summary list
-    [
-        ["Inapplicable", results.inapplicable.length],
-        ["Incomplete", results.incomplete.length],
-        ["Passes", results.passes.length],
-        ["Violations", results.violations.length],
-    ].forEach(([label, count]) => {
-        const listItem = document.createElement("li");
-        listItem.className = `summary-${label.toLowerCase()}`;
-        listItem.textContent = `${label}: ${count}`;
-
-        summaryList.appendChild(listItem);
-    });
-
-    summaryDiv.appendChild(summaryList);
-
-    // Create the violations table
-    const violationsTable = document.createElement("table");
-    violationsTable.id = "violations-table";
-    // const tableHeader = document.createElement("thead");
-    // const tableHeaderRow = document.createElement("tr");
-
-    // Create the table header
-    // ["Severity", "Count"].forEach((headerText) => {
-    //     const th = document.createElement("th");
-    //     th.textContent = headerText;
-    //     tableHeaderRow.appendChild(th);
-    // });
-
-    // tableHeader.appendChild(tableHeaderRow);
-    // violationsTable.appendChild(tableHeader);
-
-    // Create the table body with severity counts
-    const tableBody = document.createElement("tbody");
-    Object.entries(severityCounts).forEach(([severity, count]) => {
-        const tr = document.createElement("tr");
-        const tdSeverity = document.createElement("td");
-        const tdCount = document.createElement("td");
-        tdSeverity.className = `impact-${severity}`;
-        tdCount.className = `impact-${severity}`;
-        tdSeverity.textContent = severity;
-        tdCount.textContent = count;
-        tr.appendChild(tdSeverity);
-        tr.appendChild(tdCount);
-        tableBody.appendChild(tr);
-    });
-
-    violationsTable.appendChild(tableBody);
-
-    const violationsDiv = document.createElement("div");
-    violationsDiv.id = "a11y-violations-table-wrapper";
-    const violationsHeader = document.createElement("h3");
-    violationsHeader.textContent = "Violations Summary";
-    violationsDiv.appendChild(violationsHeader);
-    violationsDiv.appendChild(violationsTable);
-
-    // Append the summary and table to the main flex container
-    flexContainer.appendChild(summaryDiv);
-    flexContainer.appendChild(violationsDiv);
-
-    return flexContainer;
-}
-
-function appendViolationSections(container, violations) {
-    // sort violations by severity
-    violations.sort((a, b) => {
-        if (a.impact === "critical" && b.impact !== "critical") {
-            return -1;
-        }
-        if (a.impact !== "critical" && b.impact === "critical") {
-            return 1;
-        }
-        if (a.impact === "serious" && b.impact === "moderate") {
-            return -1;
-        }
-        if (a.impact === "moderate" && b.impact === "serious") {
-            return 1;
-        }
-        if (a.impact === "serious" && b.impact === "minor") {
-            return -1;
-        }
-        if (a.impact === "minor" && b.impact === "serious") {
-            return 1;
-        }
-        if (a.impact === "moderate" && b.impact === "minor") {
-            return -1;
-        }
-        if (a.impact === "minor" && b.impact === "moderate") {
-            return 1;
-        }
-        return 0;
-    });
-    violations.forEach((violation) => {
-        const section = document.createElement("div");
-        const button = document.createElement("button");
-        button.type = "button";
-        const content = document.createElement("div");
-
-        button.innerHTML = `${violation.id} - ${violation.impact}`;
-        button.className = `collapsible impact-${violation.impact}`;
-        content.className = "a11y-content";
-
-        const caretSpan = document.createElement("span");
-        caretSpan.className = "dashicons dashicons-arrow-down";
-        caretSpan.setAttribute("aria-hidden", "true");
-
-        button.innerHTML = `${violation.id} - ${violation.impact} `;
-        button.className = `collapsible impact-${violation.impact}`;
-
-        button.appendChild(caretSpan);
-        section.appendChild(button);
-        section.appendChild(content);
-
-        const table = document.createElement("table");
-        table.innerHTML = `
-            <tr><th>Description</th><td>${violation.description}</td></tr>
-            <tr><th>Help</th><td>${violation.help}</td></tr>
-            <tr><th>Help URL</th><td><a href="${violation.helpUrl}" target="_blank">${violation.helpUrl}</a></td></tr>
-        `;
-
-        const nodeSection = document.createElement("div");
-        nodeSection.innerHTML = "<strong>Affected Nodes:</strong>";
-
-        violation.nodes.forEach((node) => {
-            const nodeTable = document.createElement("table");
-            nodeTable.innerHTML = `
-                <tr><th>HTML Element</th><td><code>${escapeHTML(node.html)}</code></td></tr>
-                <tr><th>Impact</th><td class="impact-${violation.impact}">${node.impact}</td></tr>
-                <tr><th>Failure Summary</th><td>${node.failureSummary}</td></tr>
-            `;
-
-            nodeSection.appendChild(nodeTable);
-        });
-
-        content.appendChild(table);
-        content.appendChild(nodeSection);
-        container.appendChild(section);
-    });
-}
-
-async function fetchPageContent(url) {
-    const response = await fetch(url);
-    const text = await response.text();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(text, "text/html");
-    return doc;
-}
-
-function injectAxeScript(iframe) {
-    return new Promise((resolve, reject) => {
-        const script = iframe.contentWindow.document.createElement("script");
-        script.src = "https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.3.3/axe.min.js";
-        script.onload = resolve;
-        script.onerror = reject;
-        iframe.contentWindow.document.head.appendChild(script);
-    });
-}
-
-async function runA11yTests(event) {
-    event.preventDefault();
-
-    const postID = document.querySelector("input#post_ID").value;
-    const requestData = {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: `action=run_a11y_test&post_id=${postID}&security=${wpData.nonce}`,
-    };
-
-    const spinner = document.createElement("span");
-    spinner.className = "spinner is-active";
-    const metaBoxInsideDiv = document.querySelector("#a11y_meta_box .inside");
-    if (metaBoxInsideDiv) {
-        metaBoxInsideDiv.appendChild(spinner);
+class A11yTester {
+    constructor() {
+        this.postID = document.querySelector("input#post_ID").value;
+        this.metaBoxInsideDiv = document.querySelector("#a11y_meta_box .inside");
+        this.spinner = null;
+        this.addEventListeners();
     }
 
-    try {
-        const response = await fetch(wpData.ajax_url, requestData);
-        if (!response.ok) {
-            throw new Error(`Server responded with status ${response.status}`);
+    addEventListeners() {
+        window.addEventListener("DOMContentLoaded", () => this.initButtons());
+        window.addEventListener("click", (e) => this.handleCollapsibleClick(e));
+    }
+
+    initButtons() {
+        if (!this.metaBoxInsideDiv) return;
+
+        const runBtn = this.createButton("Run A11y Test", "run-a11y-test-button", () => this.runA11yTests());
+        const clrBtn = this.createButton("Clear A11y Test", "clear-a11y-test-button", () => this.clearResults());
+
+        this.metaBoxInsideDiv.append(runBtn, clrBtn, this.createHelpText());
+    }
+
+    createButton(text, id, clickHandler) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.id = id;
+        btn.textContent = text;
+        btn.addEventListener("click", clickHandler);
+        return btn;
+    }
+
+    createHelpText() {
+        const helpText = document.createElement("p");
+        helpText.textContent = "Make sure you have saved the post before running the test.";
+        return helpText;
+    }
+
+    handleCollapsibleClick(e) {
+        if (!e.target.classList.contains("collapsible")) return;
+
+        const content = e.target.nextElementSibling;
+        const caret = e.target.querySelector(".dashicons");
+        content.style.display = content.style.display === "block" ? "none" : "block";
+        caret.className = `dashicons dashicons-arrow-${content.style.display === "block" ? "up" : "down"}`;
+    }
+
+    async runA11yTests() {
+        this.initSpinner();
+        try {
+            const data = await this.fetchPostData();
+            const docContent = await this.fetchPageContent(data.data.url);
+            await this.runAxeTest(docContent);
+        } catch (err) {
+            this.handleError(err);
+        } finally {
+            this.removeSpinner();
         }
+    }
 
-        const data = await response.json();
-        const docContent = await fetchPageContent(data.data.url);
+    initSpinner() {
+        this.spinner = document.createElement("span");
+        this.spinner.className = "spinner is-active";
+        const runBtn = document.querySelector("#run-a11y-test-button");
+        if (runBtn) runBtn.insertAdjacentElement("afterend", this.spinner);
+    }
 
+    async fetchPostData() {
+        const requestData = {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `action=run_a11y_test&post_id=${this.postID}&security=${wpData.nonce}`,
+        };
+        const response = await fetch(wpData.ajax_url, requestData);
+        if (!response.ok) throw new Error(`Server responded with status ${response.status}`);
+        return await response.json();
+    }
+
+    async fetchPageContent(url) {
+        const response = await fetch(url);
+        const text = await response.text();
+        const parser = new DOMParser();
+        return parser.parseFromString(text, "text/html");
+    }
+
+    async runAxeTest(docContent) {
+        const iframe = this.createIframe(docContent);
+        await this.injectAxeScript(iframe);
+
+        iframe.contentWindow.axe.run((err, results) => {
+            if (err) throw err;
+            this.handleTestResults(results);
+            document.body.removeChild(iframe);
+        });
+    }
+
+    createIframe(docContent) {
         const iframe = document.createElement("iframe");
         iframe.id = "a11yTestIframe";
-        iframe.style.position = "absolute";
-        iframe.style.opacity = "0";
-        iframe.style.width = "1px";
-        iframe.style.height = "1px";
-        iframe.style.border = "none";
+        iframe.style.cssText = "position:absolute; opacity:0; width:1px; height:1px; border:none;";
         document.body.appendChild(iframe);
-
         iframe.contentWindow.document.open();
         iframe.contentWindow.document.write(docContent.documentElement.outerHTML);
         iframe.contentWindow.document.close();
+        return iframe;
+    }
 
-        await new Promise((resolve, reject) => {
+    async injectAxeScript(iframe) {
+        return new Promise((resolve, reject) => {
             const script = iframe.contentWindow.document.createElement("script");
             script.src = "https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.3.3/axe.min.js";
             script.onload = resolve;
             script.onerror = reject;
             iframe.contentWindow.document.head.appendChild(script);
         });
+    }
 
-        iframe.onload = () => {
-            iframe.contentWindow.axe.run((err, results) => {
-                if (err) throw err;
+    handleTestResults(results) {
+        const container = document.createElement("div");
+        container.id = "a11y-results";
 
-                if (spinner) spinner.remove();
+        const summarySection = this.createSummarySection(results);
+        container.appendChild(summarySection);
 
-                const oldResults = document.getElementById("a11y-results");
-                if (oldResults) oldResults.remove();
+        const resHeader = document.createElement("h3");
+        resHeader.textContent = "Violation Details";
+        container.appendChild(resHeader);
 
-                const container = document.createElement("div");
-                container.id = "a11y-results";
+        const resSubHeader = document.createElement("p");
+        resSubHeader.textContent = "Click on a violation to see more details.";
+        container.appendChild(resSubHeader);
 
-                const summarySection = createSummarySection(results);
-                container.appendChild(summarySection);
+        this.appendViolationSections(container, results.violations);
 
-                const resHeader = document.createElement("h3");
-                resHeader.textContent = "Violation Details";
-                container.appendChild(resHeader);
-                const resSubHeader = document.createElement("p");
-                resSubHeader.textContent = "Click on a violation to see more details.";
-                container.appendChild(resSubHeader);
+        if (this.metaBoxInsideDiv) this.metaBoxInsideDiv.appendChild(container);
+    }
 
-                appendViolationSections(container, results.violations);
-
-                if (metaBoxInsideDiv) {
-                    metaBoxInsideDiv.appendChild(container);
-                }
-
-                document.body.removeChild(iframe);
-            });
-        };
-    } catch (err) {
+    handleError(err) {
         console.error("Error running accessibility tests:", err);
         const errorMsg = document.createElement("div");
         errorMsg.className = "error";
         errorMsg.textContent = `Error: ${err.message}`;
-        if (metaBoxInsideDiv) {
-            metaBoxInsideDiv.appendChild(errorMsg);
+        if (this.metaBoxInsideDiv) this.metaBoxInsideDiv.appendChild(errorMsg);
+    }
+
+    removeSpinner() {
+        if (this.spinner) this.spinner.remove();
+    }
+
+    clearResults() {
+        const oldResults = document.getElementById("a11y-results");
+        if (oldResults) oldResults.remove();
+    }
+
+    createSummarySection(results) {
+        const summarySection = document.createElement("div");
+        summarySection.id = "a11y-summary-container";
+
+        summarySection.append(this.generateTestSummary(results), this.generateViolationsTable(results));
+
+        return summarySection;
+    }
+
+    generateTestSummary(results) {
+        const summaryDiv = document.createElement("div");
+        summaryDiv.id = "a11y-test-summary";
+
+        const categories = [
+            ["Inapplicable", results.inapplicable.length],
+            ["Incomplete", results.incomplete.length],
+            ["Passes", results.passes.length],
+            ["Violations", results.violations.length],
+        ];
+
+        const summaryList = this.createList(categories, (item) => {
+            const [label, count] = item;
+            const listItem = document.createElement("li");
+            listItem.className = `summary-${label.toLowerCase()}`;
+            listItem.textContent = `${label}: ${count}`;
+            return listItem;
+        });
+
+        summaryDiv.append(this.createHeader("Test Summary"), summaryList);
+
+        return summaryDiv;
+    }
+
+    generateViolationsTable(results) {
+        const violationsDiv = document.createElement("div");
+        violationsDiv.id = "a11y-violations-table";
+
+        const severityCounts = results.violations.reduce(
+            (acc, violation) => {
+                if (violation.impact) acc[violation.impact]++;
+                return acc;
+            },
+            { critical: 0, serious: 0, moderate: 0, minor: 0 }
+        );
+
+        const totalViolations = Object.values(severityCounts).reduce((a, b) => a + b, 0);
+
+        if (totalViolations === 0) {
+            const zeroCount = document.createElement("p");
+            zeroCount.style.color = "green";
+            zeroCount.textContent = "0";
+            violationsDiv.appendChild(zeroCount);
+            return violationsDiv;
         }
-        if (spinner) spinner.remove();
+
+        const tableBody = this.createList(Object.entries(severityCounts), ([severity, count]) => {
+            if (count === 0) return null;
+
+            const row = document.createElement("tr");
+            const tdSeverity = document.createElement("td");
+            const tdCount = document.createElement("td");
+            tdSeverity.className = `impact-${severity}`;
+            tdCount.className = `impact-${severity}`;
+            tdSeverity.textContent = severity;
+            tdCount.textContent = count;
+            row.append(tdSeverity, tdCount);
+
+            return row;
+        });
+
+        const table = document.createElement("table");
+        table.append(tableBody);
+
+        violationsDiv.append(this.createHeader("Violations Summary"), table);
+
+        return violationsDiv;
+    }
+
+    createList(items, callback) {
+        const list = document.createElement("ul");
+        for (const item of items) {
+            const listItem = callback(item);
+            if (listItem) list.appendChild(listItem);
+        }
+        return list;
+    }
+
+    createHeader(text) {
+        const header = document.createElement("h3");
+        header.textContent = text;
+        return header;
+    }
+
+    appendViolationSections(container, violations) {
+        const sortedViolations = this.sortViolationsBySeverity(violations);
+        sortedViolations.forEach((violation) => {
+            const section = this.createViolationSection(violation);
+            container.appendChild(section);
+        });
+    }
+
+    sortViolationsBySeverity(violations) {
+        const severityOrder = ["critical", "serious", "moderate", "minor"];
+        return violations.sort((a, b) => {
+            return severityOrder.indexOf(a.impact) - severityOrder.indexOf(b.impact);
+        });
+    }
+
+    createViolationSection(violation) {
+        const section = document.createElement("div");
+        const button = this.createCollapsibleButton(violation);
+        const content = document.createElement("div");
+        content.className = "a11y-content";
+
+        const table = this.createTable([
+            ["Description", violation.description],
+            ["Help", violation.help],
+            ["Help URL", `<a href="${violation.helpUrl}" target="_blank">${violation.helpUrl}</a>`],
+        ]);
+
+        const nodeSection = this.createNodeSection(violation);
+
+        content.append(table, nodeSection);
+        section.append(button, content);
+
+        return section;
+    }
+
+    createCollapsibleButton(violation) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `collapsible impact-${violation.impact}`;
+        button.innerHTML = `${violation.id} - ${violation.impact}`;
+
+        const caretSpan = document.createElement("span");
+        caretSpan.className = "dashicons dashicons-arrow-down";
+        button.appendChild(caretSpan);
+
+        return button;
+    }
+
+    createTable(rows) {
+        const table = document.createElement("table");
+        rows.forEach(([header, value]) => {
+            const row = document.createElement("tr");
+            const th = document.createElement("th");
+            const td = document.createElement("td");
+
+            th.textContent = header;
+            td.innerHTML = value;
+
+            row.append(th, td);
+            table.appendChild(row);
+        });
+        return table;
+    }
+
+    createNodeSection(violation) {
+        const nodeSection = document.createElement("div");
+        nodeSection.textContent = "Affected Nodes:";
+        violation.nodes.forEach((node) => {
+            const table = this.createTable([
+                ["HTML Element", `<code>${this.escapeHTML(node.html)}</code>`],
+                ["Impact", node.impact],
+                ["Failure Summary", node.failureSummary],
+            ]);
+            nodeSection.appendChild(table);
+        });
+        return nodeSection;
+    }
+
+    escapeHTML(unsafeText) {
+        const text = document.createTextNode(unsafeText);
+        const p = document.createElement("p");
+        p.appendChild(text);
+        return p.innerHTML;
     }
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-    const metaBoxInsideDiv = document.querySelector("#a11y_meta_box .inside");
-    if (metaBoxInsideDiv) {
-        const existingButton = metaBoxInsideDiv.querySelector("#run-a11y-test-button");
-        if (existingButton) {
-            existingButton.remove();
-        }
-
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.id = "run-a11y-test-button";
-        btn.textContent = "Run A11y Test";
-        btn.addEventListener("click", runA11yTests);
-        metaBoxInsideDiv.appendChild(btn);
-
-        const clrBtn = document.createElement("button");
-        clrBtn.type = "button";
-        clrBtn.id = "clear-a11y-test-button";
-        clrBtn.textContent = "Clear A11y Test";
-        clrBtn.addEventListener("click", () => {
-            const oldResults = document.getElementById("a11y-results");
-            if (oldResults) oldResults.remove();
-        });
-        metaBoxInsideDiv.appendChild(clrBtn);
-
-        const helpText = document.createElement("p");
-        helpText.textContent = "Make sure you have saved the post before running the test.";
-        metaBoxInsideDiv.appendChild(helpText);
-    }
-});
-
-window.addEventListener("click", (e) => {
-    if (e.target && e.target.classList.contains("collapsible")) {
-        const content = e.target.nextElementSibling;
-        const caret = e.target.querySelector(".dashicons");
-
-        if (content.style.display === "block") {
-            content.style.display = "none";
-            if (caret) caret.className = "dashicons dashicons-arrow-down";
-        } else {
-            content.style.display = "block";
-            if (caret) caret.className = "dashicons dashicons-arrow-up";
-        }
-    }
-});
+new A11yTester();
