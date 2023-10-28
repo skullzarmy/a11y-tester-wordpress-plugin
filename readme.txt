@@ -4,7 +4,7 @@ Tags: accessibility, a11y, testing, axe-core
 Requires at least: 4.7
 Tested up to: 5.9
 Requires PHP: 7.0
-Stable tag: 1.0.8
+Stable tag: 1.0.9
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Author: Joe Peterson
