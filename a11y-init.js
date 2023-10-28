@@ -84,22 +84,31 @@ class A11yTester {
         return parser.parseFromString(text, "text/html");
     }
 
+    executeAxe(iframe, resolve, reject) {
+        iframe.contentWindow.axe.run((err, results) => {
+            if (err) {
+                reject(err);
+            } else {
+                this.handleTestResults(results);
+                document.body.removeChild(iframe);
+                resolve();
+            }
+        });
+    }
+
     async runAxeTest(docContent) {
         const iframe = this.createIframe(docContent);
         await this.injectAxeScript(iframe);
 
         return new Promise((resolve, reject) => {
-            iframe.contentWindow.addEventListener("DOMContentLoaded", () => {
-                iframe.contentWindow.axe.run((err, results) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        this.handleTestResults(results);
-                        document.body.removeChild(iframe);
-                        resolve();
-                    }
+            if (iframe.contentWindow.document.readyState === "loading") {
+                iframe.contentWindow.addEventListener("DOMContentLoaded", () => {
+                    this.executeAxe(iframe, resolve, reject);
                 });
-            });
+            } else {
+                // Document already loaded
+                this.executeAxe(iframe, resolve, reject);
+            }
         }).catch((err) => {
             this.handleError(err);
         });
