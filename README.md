@@ -2,7 +2,7 @@
 
 [![SoCalTechLab.com logo - click to visit](./sctl_xs_rounded_white_text.webp)](https://socaltechlab.com/?rel=a11yGitHubRepo)
 
-[a SoCalTechLab.com project](https://socaltechlab.com/?rel=a11yGitHubRepo)
+[a SoCalTechLab.com project](https://socaltechlab.com/utils/a11y-tester-wordpress-plugin/?rel=a11yGitHubRepo)
 
 -   📣 Plugin Name: A11y Tester
 -   ✨ Description: Test accessibility of your WordPress pages and posts right from the admin dashboard!
