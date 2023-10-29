@@ -3,19 +3,26 @@
 /**
  * Plugin Name: A11y Tester
  * Description: A plugin to test accessibility of any page or post.
- * Version: 1.0.9
+ * Version: 1.1.0
  * Author: Joe Peterson
  * Author URI: https://joepeterson.work
  */
 
 function enqueue_a11y_scripts($hook)
 {
-    if ('post.php' === $hook || 'post-new.php' === $hook) {
-        // axe-core is omitted as it will be loaded dynamically into the iframe
-        wp_enqueue_script('a11y-init', plugin_dir_url(__FILE__) . 'a11y-init.js', array('jquery'), '1.0', true);
+    if ('post.php' === $hook || 'post-new.php' === $hook || is_admin_bar_showing()) {
+
+        // wp_enqueue_script('a11y-init', plugin_dir_url(__FILE__) . 'a11y-init.js', null, null, true);
+        wp_enqueue_script('a11y-base', plugin_dir_url(__FILE__) . 'a11y-base.js', null, null, true);
+
+        if ('post.php' === $hook || 'post-new.php' === $hook) {
+            wp_enqueue_script('a11y-admin', plugin_dir_url(__FILE__) . 'a11y-admin.js', array('a11y-base'), null, true);
+        } else if (is_admin_bar_showing()) {
+            wp_enqueue_script('a11y-admin-bar', plugin_dir_url(__FILE__) . 'a11y-admin-bar.js', array('a11y-base'), null, true);
+        }
 
         $nonce = wp_create_nonce('a11y_nonce');
-        wp_localize_script('a11y-init', 'wpData', array('ajax_url' => admin_url('admin-ajax.php'), 'nonce' => $nonce));
+        wp_localize_script('a11y-base', 'wpData', array('ajax_url' => admin_url('admin-ajax.php'), 'nonce' => $nonce));
 
         $theme_css_path = get_stylesheet_directory() . '/a11y-tester/a11y-styles.css';
         $theme_css_url = get_stylesheet_directory_uri() . '/a11y-tester/a11y-styles.css';
@@ -87,3 +94,18 @@ function a11y_custom_plugin_links($links, $file)
     return (array) $links;
 }
 add_filter('plugin_row_meta', 'a11y_custom_plugin_links', 10, 2);
+
+function a11y_admin_bar_button()
+{
+    global $wp_admin_bar;
+    $wp_admin_bar->add_menu(array(
+        'id' => 'a11y-admin-bar-button',
+        'title' => 'A11y Test',
+        'href' => '#',
+        'onclick' => 'a11yAdminBarClick()',
+        'meta' => array(
+            'class' => 'a11y-admin-bar-button',
+        ),
+    ));
+}
+add_action('admin_bar_menu', 'a11y_admin_bar_button', 999);
