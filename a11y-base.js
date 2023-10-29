@@ -40,4 +40,4 @@ class A11yBaseTester {
     }
 }
 
-export default A11yBaseTester;
+window.A11yBaseTester = A11yBaseTester;
