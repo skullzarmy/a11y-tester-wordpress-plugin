@@ -242,3 +242,63 @@ li.summary-incomplete {
     color: #555;
     font-size: 0.9em;
 }
+
+/* Result container when hidden */
+.a11y-result-container-hidden {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.6);
+    overflow: auto;
+}
+
+/* Result container when visible */
+.a11y-result-container-visible {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.6);
+    overflow: auto;
+}
+
+/* Close button */
+.a11y-result-close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: var(--btn-padding);
+    font-size: var(--font-size-16);
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.a11y-result-close-button:hover {
+    background-color: #d32f2f;
+}
+
+/* Result text */
+.a11y-result-text {
+    margin: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    font-size: var(--font-size-14);
+    line-height: 1.5;
+    color: #333333;
+    overflow-y: auto;
+    max-height: 80vh;
+    position: relative;
+}

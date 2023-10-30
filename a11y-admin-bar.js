@@ -16,10 +16,11 @@ class A11yAdminBarTester extends window.A11yBaseTester {
         return new Promise((resolve, reject) => {
             const script = document.createElement("script");
             script.src = "https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.3.3/axe.min.js";
-            script.integrity =
-                "sha512-pXOeI9K9m4t8/1wsgG8Dt8sI9FubMbNWDUU3UePGONSMYTctBNSC/w6wk6qP+k/oTF3/J9J6nXz0v2dCGjelg==";
             script.crossOrigin = "anonymous";
-            script.onload = resolve;
+            script.onload = () => {
+                console.log("Axe Core loaded.");
+                resolve();
+            };
             script.onerror = reject;
             document.head.appendChild(script);
         });
@@ -33,19 +34,21 @@ class A11yAdminBarTester extends window.A11yBaseTester {
         this.clearResults();
 
         const options = {};
-        let elementToTest = document.body;
         const adminBar = document.getElementById("wpadminbar");
 
+        // Temporarily hide the admin bar if it exists
         if (adminBar) {
-            elementToTest = document.body.cloneNode(true);
-            const clonedAdminBar = elementToTest.querySelector("#wpadminbar");
-            if (clonedAdminBar) {
-                clonedAdminBar.remove();
-            }
+            adminBar.style.display = "none";
         }
 
-        axe.run(elementToTest, options, (err, results) => {
+        axe.run(document.body, options, (err, results) => {
+            // Restore the admin bar display after the test
+            if (adminBar) {
+                adminBar.style.display = "";
+            }
+
             if (err) {
+                console.error("Axe run failed:", err);
                 return;
             }
             this.showResults(results);
@@ -73,11 +76,24 @@ class A11yAdminBarTester extends window.A11yBaseTester {
     }
 }
 
-// Entry function that will be called when the admin button is clicked
-function a11yAdminBarClick() {
+async function a11yAdminBarClick() {
+    console.log("Running accessibility tests...");
     const tester = new A11yAdminBarTester();
-    tester
-        .loadAxeCore()
-        .then(() => tester.runA11yTests())
-        .catch((error) => console.error("Could not load Axe Core:", error));
+    try {
+        await tester.loadAxeCore();
+        await tester.runA11yTests();
+    } catch (error) {
+        console.error("Error encountered:", error);
+    }
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const a11yButton = document.querySelector(".a11y-admin-bar-button a");
+
+    if (a11yButton) {
+        a11yButton.addEventListener("click", function (event) {
+            event.preventDefault();
+            a11yAdminBarClick();
+        });
+    }
+});
